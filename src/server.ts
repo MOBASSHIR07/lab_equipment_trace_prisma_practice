@@ -9,7 +9,7 @@ async function server() {
 
 
         app.listen(PORT, () => {
-            console.log(`Server is running on`);
+            console.log(`Server is running on ${PORT}`);
         })
     } catch (err) {
         await prisma.$disconnect()

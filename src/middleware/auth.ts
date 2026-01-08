@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { Role } from "../generated/prisma/enums"
+// import { Role } from "../generated/prisma/enums"
 import jwt, { JwtPayload } from 'jsonwebtoken'
 
 declare global {
@@ -9,6 +9,10 @@ declare global {
         }
     }
 }
+
+interface Role {
+    
+}// did for better auth
 
 const auth = (...role: Role[]) => {
     return (req: Request, res: Response, next: NextFunction) => {

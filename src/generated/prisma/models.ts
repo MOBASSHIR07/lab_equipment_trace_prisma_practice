@@ -10,6 +10,7 @@
  */
 export type * from './models/Equipment.js'
 export type * from './models/User.js'
+export type * from './models/TwoFactor.js'
 export type * from './models/UsageLog.js'
 export type * from './models/Session.js'
 export type * from './models/Account.js'

@@ -33,20 +33,36 @@ model Equipment {
 }
 
 model User {
-  id            String     @id
-  name          String
-  email         String
-  emailVerified Boolean    @default(false)
-  image         String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  usageLogs     UsageLog[]
+  id               String   @id
+  name             String
+  email            String   @unique
+  emailVerified    Boolean  @default(false)
+  image            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  // REQUIRED FIELD for otp
+  twoFactorEnabled Boolean? @default(false)
 
-  @@unique([email])
+  sessions         Session[]
+  accounts         Account[]
+  usageLogs        UsageLog[]
+  twoFactors       TwoFactor[] // Relation to the table below
+
   @@map("user")
 }
+
+// REQUIRED TABLE (even for OTP)
+model TwoFactor {
+  id          String  @id
+  secret      String? // Optional for OTP, but needed for schema
+  backupCodes String?
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("two_factor")
+}
+
 
 model UsageLog {
   id          String    @id @default(uuid())

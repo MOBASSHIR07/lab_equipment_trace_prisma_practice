@@ -28,6 +28,11 @@ export type Equipment = Prisma.EquipmentModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model TwoFactor
+ * 
+ */
+export type TwoFactor = Prisma.TwoFactorModel
+/**
  * Model UsageLog
  * 
  */

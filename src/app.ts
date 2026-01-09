@@ -8,9 +8,12 @@ import { auth } from "./lib/auth";
 
 
 const app = express();
-app.all("/api/auth/*splat", toNodeHandler(auth));
+
+
 app.use(express.json())
 app.use(cors())
+
+app.use("/api/auth", toNodeHandler(auth));
 
 
 app.use("/user", userRouter)

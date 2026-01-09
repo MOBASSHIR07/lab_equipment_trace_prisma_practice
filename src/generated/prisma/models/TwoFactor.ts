@@ -220,7 +220,7 @@ export type TwoFactorCreateInput = {
   id: string
   secret?: string | null
   backupCodes?: string | null
-  user: Prisma.UserCreateNestedOneWithoutTwoFactorsInput
+  user: Prisma.UserCreateNestedOneWithoutTwofactorsInput
 }
 
 export type TwoFactorUncheckedCreateInput = {
@@ -234,7 +234,7 @@ export type TwoFactorUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   secret?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   backupCodes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  user?: Prisma.UserUpdateOneRequiredWithoutTwoFactorsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutTwofactorsNestedInput
 }
 
 export type TwoFactorUncheckedUpdateInput = {

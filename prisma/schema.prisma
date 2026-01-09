@@ -40,19 +40,24 @@ model User {
   image            String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
-  
   // REQUIRED FIELD for otp
   twoFactorEnabled Boolean? @default(false)
 
-  sessions         Session[]
-  accounts         Account[]
-  usageLogs        UsageLog[]
-  twoFactors       TwoFactor[] // Relation to the table below
+  sessions   Session[]
+  accounts   Account[]
+  usageLogs  UsageLog[]
+
+  role       String?
+  banned     Boolean?    @default(false)
+  banReason  String?
+  banExpires DateTime?
+  twofactors TwoFactor[] // needed for 2fa
 
   @@map("user")
 }
 
 // REQUIRED TABLE (even for OTP)
+
 model TwoFactor {
   id          String  @id
   secret      String? // Optional for OTP, but needed for schema
@@ -60,9 +65,10 @@ model TwoFactor {
   userId      String
   user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([secret])
+  @@index([userId])
   @@map("two_factor")
 }
-
 
 model UsageLog {
   id          String    @id @default(uuid())
@@ -88,6 +94,8 @@ model Session {
   userAgent String?
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  impersonatedBy String?
 
   @@unique([token])
   @@index([userId])

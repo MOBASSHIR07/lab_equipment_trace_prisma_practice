@@ -1,8 +1,11 @@
 import { betterAuth } from "better-auth";
 import { prisma } from "./prisma";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { generateBackupCodes, twoFactor } from "better-auth/plugins"
+import {  twoFactor } from "better-auth/plugins"
 import { Resend } from 'resend';
+import { admin } from "better-auth/plugins"
+import { adminRole, userRole } from "./permissions";
+
 
 
 
@@ -28,6 +31,14 @@ export const auth = betterAuth({
     },
   },
 plugins: [
+  admin({
+    adminRoles:["admin"],
+    defaultRole:"user",
+    roles :{
+      admin:adminRole,
+      user:userRole
+    }
+  }) ,
   twoFactor({
     otpOptions: {
       async sendOTP({ user, otp }) {
@@ -48,7 +59,7 @@ plugins: [
 
   events: {
     createUser(args: { user: any }) {
-      // Access the user via args.user
+    
       console.log("USER CREATED:", args.user.email, args.user.id);
     },
     signIn(args: { user: any }) {

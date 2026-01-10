@@ -14,3 +14,9 @@ export const adminRole = ac.newRole({
 export const userRole = ac.newRole({
      equipment:["read", "update"]
 })
+
+export const rolesMap = {
+    admin: adminRole,
+    user: userRole,
+   
+};

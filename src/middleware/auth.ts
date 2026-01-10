@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from "express"
 // import { Role } from "../generated/prisma/enums"
 import jwt, { JwtPayload } from 'jsonwebtoken'
 import { auth as betterAuth } from '../lib/auth'
+import { adminRole, userRole } from "../lib/permissions";
+import { rolesMap } from "../lib/permissions";
+
 
 declare global {
     namespace Express {
@@ -54,23 +57,44 @@ const auth = (resource: Resource, action: Action) => {
                     message: "You are not authorized",
                 });
             }
-            const hasPermission = (session.user as any).can(resource, action);
 
-            if (!hasPermission) {
+
+
+
+            // const role = rolesMap[session.user.role as keyof typeof rolesMap];
+            // if (!role) {
+            //     return res.status(403).json({
+            //         message: "Forbidden: Unknown role",
+            //     });
+            // }
+
+            const allowed = await betterAuth.api.userHasPermission({
+                headers: req.headers,
+                body: {
+                    permissions: {
+                        [resource]: [action],
+                    },
+                },
+            });
+
+
+
+            if (!allowed.success) {
                 return res.status(403).json({
-                    success: false,
                     message: "Forbidden: Access Denied",
                 });
             }
 
-          // Attach user for the next function (the controller)
-          req.user = session.user;
+
+
+            // Attach user for the next function (the controller)
+            req.user = session.user;
 
 
             next()
 
         } catch (error: any) {
-
+            console.log(error);
         }
     }
 }
